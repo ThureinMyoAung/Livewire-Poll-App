@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Poll extends Model
 {
+    protected $fillable = ['title'];
     use HasFactory;
-    public function option(): HasMany
+    public function options(): HasMany
     {
         return $this->hasMany(option::class);
     }

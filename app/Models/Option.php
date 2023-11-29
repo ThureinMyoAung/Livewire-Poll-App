@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Option extends Model
 {
+    protected $fillable = ['name'];
     use HasFactory;
 
     public function poll(): BelongsTo
