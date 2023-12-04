@@ -9,7 +9,18 @@ use Livewire\Component;
 class CreatePoll extends Component
 {
     public $title;
-    public $options = [' Hello option'];
+    public $options = ['Input Option Here!!'];
+
+    protected $rules = [
+        'title' => 'required|min:3|max:225',
+        'options' => 'required|array|min:1|max:10',
+        'options.*' => 'required|min:1|max:225'
+
+    ];
+
+    protected $messages = [
+        'options.*' => "The options can't be empty."
+    ];
     public function render()
     {
         return view('livewire.create-poll');
@@ -26,9 +37,16 @@ class CreatePoll extends Component
         $this->options = array_values($this->options);
     }
 
+    public function updated($propertyName)
+
+    {
+        $this->validateOnly($propertyName);
+    }
 
     public function createPoll()
     {
+        $this->validate();
+        // dd(request()->all());
         poll::create(['title' => $this->title])
             ->options()->createMany(
                 collect($this->options)
@@ -36,7 +54,12 @@ class CreatePoll extends Component
                     ->all()
             );
         $this->reset(['title', 'options']);
+        $this->dispatch('pollCreated');
     }
+
+
+
+
     // public function createPoll()
     // {
     //     // $poll = Poll::create([
